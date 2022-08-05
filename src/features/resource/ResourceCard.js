@@ -20,7 +20,7 @@ export const ResourceCard = ({
   let navigate = useNavigate();
 
   const routeChange = () => {
-    let path = `${id}`;
+    let path = `/${id}`;
     navigate(path);
   };
 

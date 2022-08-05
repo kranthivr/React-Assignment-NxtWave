@@ -47,8 +47,13 @@ export const ResourceView = () => {
           <ToggleButton value="user">Users</ToggleButton>
         </ToggleButtonGroup>
       </div>
-      <div className="search">
-        <input type="text" value={search} onChange={(e) => handleSearch(e)} />
+      <div>
+        <input
+          className="search"
+          type="text"
+          value={search}
+          onChange={(e) => handleSearch(e)}
+        />
       </div>
       <div>
         {resources.loading && <div>Loading</div>}
