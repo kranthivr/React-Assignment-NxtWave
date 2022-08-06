@@ -22,7 +22,7 @@ export const ItemTable = ({ title, itemArray }) => {
   };
 
   const handleDelete = () => {
-    alert(`Clicked`);
+    alert(`Success`);
   };
 
   const tableInstance = useTable(
@@ -59,6 +59,7 @@ export const ItemTable = ({ title, itemArray }) => {
     page,
     nextPage,
     previousPage,
+    pageOptions,
     canNextPage,
     canPreviousPage,
     prepareRow,
@@ -68,7 +69,7 @@ export const ItemTable = ({ title, itemArray }) => {
     selectedFlatRows,
   } = tableInstance;
 
-  const { globalFilter } = { state };
+  const { globalFilter, pageIndex } = state;
 
   useEffect(() => {
     setPageSize(6);
@@ -80,13 +81,22 @@ export const ItemTable = ({ title, itemArray }) => {
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <table {...getTableProps()}>
         <thead>
-          {headerGroups?.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps}>
-              {headerGroup.headers?.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-              ))}
-            </tr>
-          ))}
+          {headerGroups.map((headerGroup) => {
+            const { key, ...restHeaderGroupProps } =
+              headerGroup.getHeaderGroupProps();
+            return (
+              <tr key={key} {...restHeaderGroupProps}>
+                {headerGroup.headers.map((column) => {
+                  const { key, ...restColumn } = column.getHeaderProps();
+                  return (
+                    <th key={key} {...restColumn}>
+                      {column.render("Header")}
+                    </th>
+                  );
+                })}
+              </tr>
+            );
+          })}
         </thead>
         <tbody {...getTableBodyProps()}>
           {page?.map((row) => {
@@ -95,21 +105,7 @@ export const ItemTable = ({ title, itemArray }) => {
               <tr {...row.getRowProps()}>
                 {row.cells?.map((cell) => {
                   return (
-                    <td
-                      onClick={() =>
-                        navigate("/add-item", {
-                          state: {
-                            it: cell.row.original.title,
-                            li: cell.row.original.link,
-                            res: title,
-                            des: cell.row.original.description,
-                          },
-                        })
-                      }
-                      {...cell.getCellProps()}
-                    >
-                      {cell.render("Cell")}
-                    </td>
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                   );
                 })}
               </tr>
@@ -141,10 +137,17 @@ export const ItemTable = ({ title, itemArray }) => {
             }}
             disabled={!canPreviousPage}
           >
-            Previous
+            &lt;
           </button>
+          <span>
+            {" "}
+            Page:{" "}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}{" "}
+            </strong>
+          </span>
           <button onClick={() => nextPage()} disabled={!canNextPage}>
-            Next
+            &gt;
           </button>
         </div>
       </div>

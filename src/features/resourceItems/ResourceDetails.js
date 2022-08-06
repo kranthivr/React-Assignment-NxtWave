@@ -15,7 +15,9 @@ const ResourceDetails = ({ id, title, icon, link, description, itemArray }) => {
         <CardHeading>
           <CardTitle>{title}</CardTitle>
           <CardCategory>{id}</CardCategory>
-          <CardLink href={link}>{link}</CardLink>
+          <CardLink href={link} target="_blank" rel="noopener noreferrer">
+            {link}
+          </CardLink>
         </CardHeading>
       </div>
       <CardDesc>{description}</CardDesc>

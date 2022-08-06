@@ -6,6 +6,7 @@ export const GlobalFilter = ({ filter, setFilter }) => {
       <input
         className="search"
         type={filter || ""}
+        placeholder="Search by title"
         onChange={(e) => setFilter(e.target.value)}
       />
     </span>

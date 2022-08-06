@@ -1,32 +1,60 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Breadcrumbs, Link } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const AddItem = () => {
   const formRef = useRef();
-  const location = useLocation();
-  const { it, li, res, des } = location.state || "";
 
   const navigate = useNavigate();
-  const [itemName, setItemName] = useState(it || "");
-  const [link, setLink] = useState(li || "");
-  const [resName, setResName] = useState(res || "");
-  const [description, setDescription] = useState(des || "");
+  const [itemName, setItemName] = useState("");
+  const [link, setLink] = useState("");
+  const [resName, setResName] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast.success("Success!", {
-      position: "bottom-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+
+    fetch(
+      "https://media-content.ccbp.in/website/react-assignment/add_resource.json",
+      {
+        method: "POST",
+        // mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin":
+            "https://media-content.ccbp.in/website/react-assignment/add_resource.json",
+          "Access-Control-Allow-Methods": "POST",
+        },
+        body: formRef.current,
+      }
+    )
+      .then((response) => response.json())
+      .then((json) =>
+        toast.success("Success!", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      )
+      .catch((err) =>
+        toast.error("Couldn't add item to Resource List", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      );
+
     setItemName("");
     setDescription("");
     setLink("");
